@@ -3,7 +3,7 @@
 # os: all
 # 
 # This is very cool program.
-require 'polvo'
+require 'polvomenu'
 
 # TODO
 # Este binario deve extendido com flags, usage etc
