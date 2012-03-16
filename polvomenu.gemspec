@@ -1,6 +1,9 @@
+$:.push File.expand_path("../lib", __FILE__)
+require 'polvo'
+
 Gem::Specification.new do |s|
   s.name        =  'polvomenu'
-  s.version     =  Polvo::Version
+  s.version     =  Polvo::VERSION
   s.date        =  '2012-04-17'
   s.summary     =  "Directory-based command-line menu"
   s.description =  "Directory-based command-line menu "
