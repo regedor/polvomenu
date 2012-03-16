@@ -6,7 +6,8 @@ Gem::Specification.new do |s|
   s.description = "Directory-based command-line menu "
   s.authors     = ["Miguel Regedor","André Santos","Group Buddies"]
   s.email       = 'regedor@groupbuddies.com'
-  s.files       = ["lib/polvo.rb"]
+  s.executables << 'polvo'
+  s.files       = Dir["{bin,lib}/**/*"] #+ ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.homepage    =
     'http://rubygems.org/gems/polvo'
 end

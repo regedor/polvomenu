@@ -65,14 +65,14 @@ module Polvo::Printer
   def self.menu(items,options = {})
     question = options['question'] || 'Choice: '
     self.clear unless options['noclear']
-    Printer.h1(options['title']) if options['title']
+    self.h1(options['title']) if options['title']
     i = 0 
     items.each do |item|
       opt = (sprintf "%5d",i+1).gsub!(/\s(\d)/,'[\1')
       puts  "#{opt}] #{item}"
       i+=1
     end
-    Printer.warn(options['warn']) if options['warn']
+    self.warn(options['warn']) if options['warn']
     return self.ask(question)
   end
 end

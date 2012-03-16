@@ -1,11 +1,15 @@
 #!/usr/bin/env ruby
-
+# title: Polvo terminal command
+# os: all
+# 
+# This is very cool program.
 require 'polvo'
-puts Polvo.who_am_i(ARGV[0])
 
+# TODO
+# Este binario deve extendido com flags, usage etc
+# menu.render '.',{ 'title' => 'polvo menu' } 
 
-
-path     = ARGV.shift
 rootdirs = ARGV
-menu = Polvo::Menu.new(rootdirs,path)
-menu.render('.',{ 'title' => 'polvo menu' })
+menu = Polvo::Menu.new(rootdirs)
+menu.render
+

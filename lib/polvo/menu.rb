@@ -31,7 +31,7 @@ class Polvo::Menu
 
   private
   def exec_item(item, options={})
-    Printer.clear
+    Polvo::Printer.clear
     path = "#{item['rootdir']}/#{item['path']}"
     if File.directory?(path)
       return "Empty directory!" if Dir.entries(path).sort == ['.','..','info.menu']
@@ -40,7 +40,7 @@ class Polvo::Menu
       self.render item['path'], options 
     else
       system(path)
-      Printer.wait
+      Polvo::Printer.wait
     end
     return nil
   end
@@ -55,9 +55,9 @@ class Polvo::Menu
       menu_opts.push("#{title}\t"+"#{rootdir}/#{path}".magenta)
     end
     
-    choice = Printer.menu(menu_opts,options)
+    choice = Polvo::Printer.menu(menu_opts,options)
     options.delete 'warn'
-    Printer.clear
+    Polvo::Printer.clear
     
     return true  if choice == ''
     return false if choice == '0'
@@ -78,11 +78,11 @@ class Polvo::Menu
       if choice == ''
         return true
       else
-        #Printer.warn("'#{choice}' is not a valid option!")
+        #Polvo::Printer.warn("'#{choice}' is not a valid option!")
         return false
       end
     unless int_choice < max and int_choice >= 0
-      #Printer.warn("'#{choice}' is not a valid option!")
+      #Polvo::Printer.warn("'#{choice}' is not a valid option!")
       return false
     end
     return true
@@ -111,7 +111,7 @@ class Polvo::Menu
       os = $1 || 'all'
     end
     #if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
-    return { 'title' => title, 'os' => os, type => 'script','path' => file, 'rootdir' => rootdir}
+    return { 'title' => title, 'os' => os, 'type' => 'script','path' => file, 'rootdir' => rootdir}
   end
 
 end
