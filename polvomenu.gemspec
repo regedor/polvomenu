@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.description =  "Directory-based command-line menu "
   s.authors     =  ["Miguel Regedor","André Santos","Group Buddies"]
   s.email       =  'regedor@groupbuddies.com'
-  s.executables << 'polvo'
+  s.executables << 'polvomenu'
   s.files       =  Dir["{bin,lib}/**/*"] #+ ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.homepage    =  'http://rubygems.org/gems/polvomenu'
 end
