@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'polvo'
+puts Polvo.who_am_i(ARGV[0])

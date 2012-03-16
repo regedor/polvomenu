@@ -1,6 +1,6 @@
 module Polvo
-  def self.who_am_i?
-    puts "Eu sou o polvo"
+  def self.who_am_i?(options={})
+    puts "Eu sou o polvo!"
   end
 end
 
