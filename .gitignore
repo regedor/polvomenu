@@ -67,3 +67,4 @@ tmtags
 
 # Ruby Gem files
 *.gem
+Gemfile.lock
