@@ -1,15 +1,17 @@
 $:.push File.expand_path("../lib", __FILE__)
 require 'polvo'
 
-Gem::Specification.new do |s|
-  s.name        =  'polvomenu'
-  s.version     =  Polvo::VERSION
-  s.date        =  '2012-04-17'
-  s.summary     =  "Directory-based command-line menu"
-  s.description =  "Directory-based command-line menu "
-  s.authors     =  ["Miguel Regedor","André Santos","Group Buddies"]
-  s.email       =  'regedor@groupbuddies.com'
-  s.executables << 'polvomenu'
-  s.files       =  Dir["{bin,lib}/**/*"] #+ ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.homepage    =  'http://rubygems.org/gems/polvomenu'
+Gem::Specification.new do |gem|
+  gem.name        =  'polvomenu'
+  gem.version     =  Polvo::VERSION
+  gem.date        =  '2012-04-17'
+  gem.summary     =  "Directory-based command-line menu"
+  gem.description =  "Directory-based command-line menu "
+  gem.authors     =  ["Miguel Regedor","André Santos","Group Buddies"]
+  gem.email       =  'regedor@groupbuddies.com'
+  gem.executables << 'polvomenu'
+  gem.files       =  Dir["{bin,lib}/**/*"] #+ ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  gem.homepage    =  'http://rubygems.org/gems/polvomenu'
+
+  gem.add_dependency 'colorize'
 end
