@@ -1,0 +1,67 @@
+# Linux ignores
+.*
+*~
+*.sw[a-p]
+.directory
+
+# OSX ignores
+.DS_Store?
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# TextMate ignores
+*.tmproj
+*.tmproject
+tmtags
+
+# bundler state
+/.bundle
+/vendor/bundle/
+
+# various artifacts
+**.war
+*.rbc
+*.sassc
+.rspec
+.redcar/
+.sass-cache
+/config/config.yml
+/config/database.yml
+/coverage.data
+/coverage/
+/db/*.javadb/
+/db/*.sqlite3-journal
+/doc/api/
+/doc/app/
+/doc/features.html
+/doc/specs.html
+/public/cache
+/public/stylesheets/compiled
+/public/system
+/spec/tmp/*
+/cache
+/capybara*
+/capybara-*.html
+/gems
+/rerun.txt
+/spec/requests
+/spec/routing
+/spec/views
+/specifications
+
+# scm revert files
+**.orig
+
+# RubyMine project files
+.idea
+
+# Textmate project files
+/*.tmproj
+
+# Vim ignores
+**.swp
+.*.sw[a-z]
+*.un~
+
