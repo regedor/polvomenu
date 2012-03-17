@@ -1,17 +1,25 @@
 $:.push File.expand_path("../lib", __FILE__)
 require 'polvomenu'
 
-Gem::Specification.new do |gem|
-  gem.name        =  'polvomenu'
-  gem.version     =  Polvo::VERSION
-  gem.date        =  '2012-04-17'
-  gem.summary     =  "Directory-based command-line menu"
-  gem.description =  "Directory-based command-line menu "
-  gem.authors     =  ["Group Buddies"]
-  gem.email       =  'regedor@groupbuddies.com'
-  gem.executables << 'polvomenu'
-  gem.files       =  Dir["{bin,lib}/**/*"] #+ ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  gem.homepage    =  'http://rubygems.org/gems/polvomenu'
+Gem::Specification.new do |s|
+  # Metadata
+  s.name        =  'polvomenu'
+  s.version     =  Polvo::VERSION
+  s.date        =  '2012-04-17'
+  s.authors     =  ["Group Buddies"]
+  s.email       =  'regedor@groupbuddies.com'
+  s.homepage    =  'http://rubygems.org/gems/polvomenu'
+  s.summary     =  "Directory-based command-line menu"
+  s.description =  "Directory-based command-line menu "
 
-  gem.add_dependency 'colorize'
+  # Manifest
+  s.files       =  Dir["{bin,lib}/**/*"] #+ ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  # s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.executables =  'polvomenu'
+  # s.require_paths = ["lib"]
+
+  # Dependencies
+  s.add_dependency 'colorize'
+  # s.add_development_dependency "rspec"
+  # s.add_runtime_dependency "rest-client"
 end
