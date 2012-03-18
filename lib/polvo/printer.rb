@@ -1,78 +1,93 @@
 module Polvo::Printer
-  def self.h1(str)
-    printf "\n === "
-    printf str.upcase  
-    printf " ===\n\n"
-  end
-
-  def self.h2(str)
-    self.h1(str)
-  end
-
-  def self.h3(str)
-    self.h1(str)
-  end
-
-
-  def self.h4(str)
-    self.h1(str)
-  end
-
-  def self.h5(str)
-    self.h1(str)
-  end
-  
-  def self.p(str)
-    print "\n",str,"\n\n"
-  end
-
-  def self.error(str)
-    str = '*** '+str
-    puts str.red
-  end
-
-  def self.warn(str)
-    str = '*** '+str
-    puts str.yellow
-  end
-
-  def self.ok(str)
-    str = '*** '+str
-    puts str.green
-  end
-
-  def self.wait(str='Press ENTER to continue.')
-    puts
-    self.warn(str)
-    STDIN.gets
-  end
-  
-  def self.debug(str)
-    puts str.magenta
-  end
-
-  def self.ask(str)
-    printf "\n#{str}"
-    return STDIN.gets.chomp
-    puts
-  end
-
-  def self.clear
-    puts
-    #system('clear')
-  end
-
-  def self.menu(items,options = {})
-    question = options['question'] || 'Choice: '
-    self.clear unless options['noclear']
-    self.h1(options['title']) if options['title']
-    i = 0 
-    items.each do |item|
-      opt = (sprintf "%5d",i+1).gsub!(/\s(\d)/,'[\1')
-      puts  "#{opt}] #{item}"
-      i+=1
+  class << self
+    
+    # --------------------------------------------
+    #  Simple methods for outputing semantic text
+    # --------------------------------------------
+    def h1(str)
+      printf "\n === #{str.upcase} ===\n\n"
     end
-    self.warn(options['warn']) if options['warn']
-    return self.ask(question)
+    
+    def h2(str)
+      self.h1(str)
+    end
+    
+    def h3(str)
+      self.h1(str)
+    end
+    
+    def h4(str)
+      self.h1(str)
+    end
+    
+    def h5(str)
+      self.h1(str)
+    end
+    
+    def p(str)
+      print str,"\n\n"
+    end
+    
+    def notice(str)
+      puts "*** #{str}".green
+    end
+    
+    def warning(str)
+      puts "*** #{str}".yellow
+    end
+
+    def error(str)
+      puts "*** #{str}".red
+    end
+    
+    
+    # ---------------------------------------------
+    #  Simple methods that expect user interaction
+    # ---------------------------------------------
+    def wait(str='Press ENTER to continue.')
+      puts
+      self.warning(str)
+      STDIN.gets
+    end
+    
+    def confirm(str="Continue")
+      printf "\n#{str} yes/no? ".yellow
+      input = STDIN.gets.chomp
+      return( %w{y Y yes YES}.any? {|v| v == input} )
+      puts
+    end
+    
+    def ask(str)
+      printf "\n#{str}"
+      return STDIN.gets.chomp
+      puts
+    end
+   
+    def menu(items,options = {})
+      question = options['question'] || 'Choice: '
+      self.clear unless options['noclear']
+      self.h1(options['title']) if options['title']
+      i = 0 
+      items.each do |item|
+        opt = (sprintf "%5d",i+1).gsub!(/\s(\d)/,'[\1')
+        puts  "#{opt}] #{item}"
+        i+=1
+      end
+      self.warn(options['warn']) if options['warn']
+      return self.ask(question)
+    end
+    
+    
+    # --------------------------------------
+    #  More useful methods
+    # --------------------------------------
+    def clear
+      system('clear')
+    end
+    
+    def debug(str)
+      puts str.magenta
+    end
+    
   end
 end

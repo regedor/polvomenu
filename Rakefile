@@ -4,6 +4,13 @@ RSpec::Core::RakeTask.new('spec')
 #desc "Run RSpec code examples"
 #task :default => :test
 
+namespace :test do
+  desc "Load development gem and starts IRB"
+  task :console do
+    exec 'irb -I lib -r polvomenu.rb'
+  end
+end
+
 namespace :gem do
   desc "Deletes built gem files"
   task :clean do
