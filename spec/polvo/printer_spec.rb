@@ -60,9 +60,25 @@ describe Polvo::Printer do
   end
   
   describe ".menu" do
-    it "should have tests" do
+    subject {Polvo::Printer}
+    items          = ["Option 1","Option 2","Option 3","Option 4"]
+    valid_answer   = "3"
+    invalid_answer = "7"
+    
+    it "should not acept invalid answer" do
+      $stdin.should_receive(:gets).and_return(invalid_answer,valid_answer)
+      subject.menu(items).should == valid_answer
+    end
+    
+    it "should acept invalid answer if extended_option is true" do
+      $stdin.should_receive(:gets).and_return(invalid_answer)
+      subject.menu(items, :extended_option => true).should == invalid_answer
+    end
+    
+    it "should have more tests" do
       pending "write tests or I will kneecap you"
     end
+    
   end
   
   it ".clear should have tests" do
