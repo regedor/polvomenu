@@ -14,9 +14,9 @@ describe Polvo::Printer do
   end
   
   # .h1*(str) should output
-  %w{h1 h2 h3 h4 h5 p notice warning error}.each do |method|
+  %w{h1 h2 h3 h4 h5 p notice warning error debug}.each do |method|
     ["text", "coisas loucas", "pumba\npumba"].each do |text|
-      it ".#{method}('#{text}') should output (write on stdout, case insensitive): #{text}" do
+      it ".#{method}(#{text.inspect}) should output #{text.inspect} (case insensitive)" do
         Polvo::Printer.send method, text
         @output.should =~ /#{text}/i
       end
@@ -26,7 +26,7 @@ describe Polvo::Printer do
   # .h1*(str) should capitalize
   %w{h1 h2 h3 h4 h5}.each do |method|
     {"mouse" => "MOUSE"}.each do |input, output|
-      it ".#{method} when called with '#{input}', should output: #{output}" do
+      it ".#{method}(#{input.inspect}) should output #{output.inspect}" do
         Polvo::Printer.send method, input
         @output.should =~ /#{output}/
       end
@@ -51,7 +51,7 @@ describe Polvo::Printer do
     end
   end
   
-    
+  
   it "should have the method ask that returns the user input" do
     question, answer = "Queres bananas?", "Sim"
     $stdin.should_receive(:gets).and_return(answer)
@@ -59,11 +59,15 @@ describe Polvo::Printer do
     subject.ask(question).should == answer  
   end
   
+  describe ".menu" do
+    it "should have tests" do
+      pending "write tests or I will kneecap you"
+    end
+  end
   
-  
-
-
-# # 
+  it ".clear should have tests" do
+    pending "write tests or I will kneecap you"
+  end
 
 end
 
