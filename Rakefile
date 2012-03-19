@@ -1,8 +1,11 @@
 require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new('spec')
-#desc "Run RSpec code examples"
-#task :default => :test
+
+task :default do 
+  puts `rake -T`
+  
+end
 
 namespace :test do
   desc "Load development gem and starts IRB"
