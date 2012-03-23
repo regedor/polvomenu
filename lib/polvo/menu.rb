@@ -31,7 +31,7 @@ class Polvo::Menu
 
   private
   def exec_item(item, options={})
-    Polvo::Printer.clear
+    Polvo::IO.clear
     path = "#{item['rootdir']}/#{item['path']}"
     if File.directory?(path)
       return "Empty directory!" if Dir.entries(path).sort == ['.','..','info.menu']
@@ -40,7 +40,7 @@ class Polvo::Menu
       self.render item['path'], options 
     else
       system(path)
-      Polvo::Printer.wait
+      Polvo::IO.wait
     end
     return nil
   end
@@ -55,9 +55,9 @@ class Polvo::Menu
       menu_opts.push("#{title}\t"+"#{rootdir}/#{path}".magenta)
     end
     
-    choice = Polvo::Printer.menu(menu_opts,options)
+    choice = Polvo::IO.menu(menu_opts,options)
     options.delete 'warn'
-    Polvo::Printer.clear
+    Polvo::IO.clear
     
     return true  if choice == ''
     return false if choice == '0'
@@ -78,11 +78,11 @@ class Polvo::Menu
       if choice == ''
         return true
       else
-        #Polvo::Printer.warn("'#{choice}' is not a valid option!")
+        #Polvo::IO.warn("'#{choice}' is not a valid option!")
         return false
       end
     unless int_choice < max and int_choice >= 0
-      #Polvo::Printer.warn("'#{choice}' is not a valid option!")
+      #Polvo::IO.warn("'#{choice}' is not a valid option!")
       return false
     end
     return true

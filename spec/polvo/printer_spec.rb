@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Polvo::Printer do
+describe Polvo::IO do
   before(:each) do
     @output = ''
     @err    = ''
@@ -17,7 +17,7 @@ describe Polvo::Printer do
   %w{h1 h2 h3 h4 h5 p notice warning error debug}.each do |method|
     ["text", "coisas loucas", "pumba\npumba"].each do |text|
       it ".#{method}(#{text.inspect}) should output #{text.inspect} (case insensitive)" do
-        Polvo::Printer.send method, text
+        Polvo::IO.send method, text
         @output.should =~ /#{text}/i
       end
     end
@@ -27,7 +27,7 @@ describe Polvo::Printer do
   %w{h1 h2 h3 h4 h5}.each do |method|
     {"mouse" => "MOUSE"}.each do |input, output|
       it ".#{method}(#{input.inspect}) should output #{output.inspect}" do
-        Polvo::Printer.send method, input
+        Polvo::IO.send method, input
         @output.should =~ /#{output}/
       end
     end
@@ -60,7 +60,7 @@ describe Polvo::Printer do
   end
   
   describe ".menu" do
-    subject {Polvo::Printer}
+    subject {Polvo::IO}
     items          = ["Option 1","Option 2","Option 3","Option 4"]
     valid_answer   = "3"
     invalid_answer = "7"
