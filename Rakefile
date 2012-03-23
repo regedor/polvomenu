@@ -22,7 +22,7 @@ namespace :gem do
 
   desc "Cleans all the gem files, creates a new one, push it to rubygems and installs it "
   task :release_new_version do
-    `rm polvomenu-*.gem `
+    `rm polvomenu-*.gem`
     `gem build polvomenu.gemspec`
     `gem push polvomenu-*.gem`
     `gem uninstall polvomenu`
@@ -32,9 +32,9 @@ namespace :gem do
 
   desc "Cleans all the gem files, creates a new one, installs it "
   task :install_local do
-    `rm polvomenu-*.gem `
+    `rm polvomenu-*.gem`
     `gem build polvomenu.gemspec`
-    `gem uninstall polvomenu`
+    `gem uninstall -x polvomenu`
     `gem install polvomenu-*.gem`
   end
 
