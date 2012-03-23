@@ -51,7 +51,7 @@ module Polvo::Printer
     end
     
     def confirm(str="Continue")
-      printf "\n#{str} yes/no? ".yellow
+      printf "\n#{str} [y/n] ".yellow
       input = STDIN.gets.chomp
       return( %w{y Y yes YES}.any? {|v| v == input} )
       puts
@@ -67,7 +67,7 @@ module Polvo::Printer
       question = options['question'] || 'Choice: '
       self.clear                     unless options['noclear']
       self.h1(options['title'])      if options['title']
-      self.p(options['description']) if options['title']
+      self.p(options['description']) if options['description']
       i = 0 
       items.each do |item|
         opt = (sprintf "%5d",i+1).gsub!(/\s(\d)/,'[\1')
