@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Polvo::Printer do
+describe Polvo::IO do
   before(:each) do
     @output = ''
     @err    = ''
@@ -17,7 +17,7 @@ describe Polvo::Printer do
   %w{h1 h2 h3 h4 h5 p notice warning error debug}.each do |method|
     ["text", "coisas loucas", "pumba\npumba"].each do |text|
       it ".#{method}(#{text.inspect}) should output #{text.inspect} (case insensitive)" do
-        Polvo::Printer.send method, text
+        Polvo::IO.send method, text
         @output.should =~ /#{text}/i
       end
     end
@@ -27,7 +27,7 @@ describe Polvo::Printer do
   %w{h1 h2 h3 h4 h5}.each do |method|
     {"mouse" => "MOUSE"}.each do |input, output|
       it ".#{method}(#{input.inspect}) should output #{output.inspect}" do
-        Polvo::Printer.send method, input
+        Polvo::IO.send method, input
         @output.should =~ /#{output}/
       end
     end
@@ -60,19 +60,27 @@ describe Polvo::Printer do
   end
   
   describe ".menu" do
-    subject {Polvo::Printer}
-    items          = ["Option 1","Option 2","Option 3","Option 4"]
-    valid_answer   = "3"
-    invalid_answer = "7"
+    subject {Polvo::IO}
+    items                   = ["Option 1","Option 2","Option 3","Option 4"]
+    items_advanced          = ["Option 1","Option 2","Option 3","Option 4",{:label => "All of them", :answer => "all"}]
+    valid_answer            = "3"
+    invalid_answer          = "7"
+    valid_answer_with_args = "3d lol"
+    extra_answers           = ["7","","lol","sdf"]
     
     it "should not acept invalid answer" do
       $stdin.should_receive(:gets).and_return(invalid_answer,valid_answer)
       subject.menu(items).should == valid_answer
     end
     
-    it "should acept invalid answer if extended_option is true" do
-      $stdin.should_receive(:gets).and_return(invalid_answer)
-      subject.menu(items, :extended_option => true).should == invalid_answer
+    it "should acept answer with args if extended_option is true" do
+      $stdin.should_receive(:gets).and_retur(valid_answer_with_args)
+      subject.menu(items, :extended_option => true).should == valid_answer_with_args
+    end
+ 
+    it "should not acept invalid answer if extended_option is true" do
+      $stdin.should_receive(:gets).and_return(invalid_answer, valid_answer)
+      subject.menu(items, :extended_option => true).should == valid_answer
     end
     
     it "should have more tests" do
