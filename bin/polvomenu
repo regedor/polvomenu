@@ -10,6 +10,6 @@ require 'polvomenu'
 # menu.render '.',{ 'title' => 'polvo menu' } 
 
 rootdirs = ARGV
-menu = Polvo::Menu.new(rootdirs)
-menu.render
+menu = Polvo::Menu.new rootdirs
+menu.render '.', :extra_answers => ['','0']
 

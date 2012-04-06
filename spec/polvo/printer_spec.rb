@@ -61,18 +61,26 @@ describe Polvo::IO do
   
   describe ".menu" do
     subject {Polvo::IO}
-    items          = ["Option 1","Option 2","Option 3","Option 4"]
-    valid_answer   = "3"
-    invalid_answer = "7"
+    items                   = ["Option 1","Option 2","Option 3","Option 4"]
+    items_advanced          = ["Option 1","Option 2","Option 3","Option 4",{:label => "All of them", :answer => "all"}]
+    valid_answer            = "3"
+    invalid_answer          = "7"
+    valid_answer_with_args = "3d lol"
+    extra_answers           = ["7","","lol","sdf"]
     
     it "should not acept invalid answer" do
       $stdin.should_receive(:gets).and_return(invalid_answer,valid_answer)
       subject.menu(items).should == valid_answer
     end
     
-    it "should acept invalid answer if extended_option is true" do
-      $stdin.should_receive(:gets).and_return(invalid_answer)
-      subject.menu(items, :extended_option => true).should == invalid_answer
+    it "should acept answer with args if extended_option is true" do
+      $stdin.should_receive(:gets).and_retur(valid_answer_with_args)
+      subject.menu(items, :extended_option => true).should == valid_answer_with_args
+    end
+ 
+    it "should not acept invalid answer if extended_option is true" do
+      $stdin.should_receive(:gets).and_return(invalid_answer, valid_answer)
+      subject.menu(items, :extended_option => true).should == valid_answer
     end
     
     it "should have more tests" do

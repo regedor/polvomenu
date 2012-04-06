@@ -64,26 +64,72 @@ module Polvo::IO
     end
    
     def menu(items,options = {})
+      # Clear screen, show title and drescription
       question = options['question'] || 'Choice: '
       self.clear                     unless options['noclear']
       self.h1(options['title'])      if options['title']
       self.p(options['description']) if options['description']
+
+      # Print menu options
       i = 0 
       items.each do |item|
-        opt = (sprintf "%5d",i+1).gsub!(/\s(\d)/,'[\1')
-        puts "#{opt}] #{item}"
-        i+=1
+        if item.class == 'Hash'
+          opt = sprintf("%5s",item[:answer]).gsub!(/\s(\w)/,'[\1')
+          puts "#{opt}] #{item[:label]}"
+        else
+          opt = (sprintf "%5d",i+1).gsub!(/\s(\d)/,'[\1')
+          puts "#{opt}] #{item}"
+          i+=1
+        end
       end
-      self.warn(options['warn']) if options['warn']
-      return self.ask(question)
+
+      # Show warn (if any) and read user choice
+      self.warning(options['warn']) if options['warn']
+      options.delete 'warn'
+      choice = self.ask(question)
+      
+      # Parse user choice
+      if option = parse_choice(choice,items.count+1,options)
+        return option
+      else
+        options['warn'] = "'#{choice}' is not a valid option!" 
+        return self.menu(items,options)
+      end
     end
     
+    def parse_choice(choice, max, options = {})
+      # Normal mode (accepts only integers > 0 and <= max, ex: '3')
+      if choice =~ /^\d+$/
+        int_choice = Integer(choice)
+        return int_choice if int_choice > 0 and int_choice <= max
+      end
+
+      # Extended mode (accepts integers followed by anything, ex: '3e file')
+      if options[:extended_options]
+        if choice =~ /^(\d+)(.*?)$/
+          int_choice = '\1'
+          args = '\2'
+          return { :option => '\1', :args => '\2' } if int_choice > 0 and int_choice <= max
+        end
+      end
+      
+      # Extra answers (ex: '', '0', 'weird option')
+      if options[:extra_answers]
+        return choice if options[:extra_answers].include?(choice)
+      end
+
+      return false
+    end
     
     # --------------------------------------
     #  More useful methods
     # --------------------------------------
     def clear
-      system('clear')
+      if ENV['POLVO_DEBUG']
+        puts "\n\n\n\n"
+      else
+        system('clear')
+      end
     end
     
     def debug(str)
