@@ -11,7 +11,7 @@ end
 
 desc "Deletes built gem files"
 task :clean do
-  system "rm polvomenu-*.gem"
+  system "rm -f polvomenu-*.gem"
 end
 
 task :build => :clean  do
@@ -31,16 +31,16 @@ end
 namespace :install do
   
   task :local => :build do
-    system "gem uninstall polvomenu"   
+    system "gem uninstall -x polvomenu"   
     system "sudo gem install polvo-menu-#{Polvo::Menu::VERSION}.gem"
   end
   
   desc "Cleans all the gem files, creates a new one, installs it "
   task :remote do
-  `rm polvomenu-*.gem `
-  `gem build polvomenu.gemspec`
-  `gem uninstall polvomenu`
-  `gem install polvomenu-*.gem`
+    `rm polvomenu-*.gem `
+    `gem build polvomenu.gemspec`
+    `gem uninstall polvomenu`
+    `gem install polvomenu-*.gem`
   end
   
 end

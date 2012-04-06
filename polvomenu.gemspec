@@ -4,7 +4,7 @@ require 'polvomenu'
 Gem::Specification.new do |s|
   # Metadata
   s.name        =  'polvomenu'
-  s.version     =  Polvo::VERSION
+  s.version     =  Polvo::Menu::VERSION
   s.date        =  '2012-04-17'
   s.authors     =  ["Group Buddies"]
   s.email       =  'regedor@groupbuddies.com'

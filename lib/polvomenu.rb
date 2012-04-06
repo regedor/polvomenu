@@ -12,7 +12,7 @@ end
 
 require_relative 'polvo'
 require_relative 'polvo/menu/version'
-require_relative 'polvo/printer'
+require_relative 'polvo/io'
 require_relative 'polvo/menu'
 
-OUT = Polvo::Printer
+OUT = Polvo::IO

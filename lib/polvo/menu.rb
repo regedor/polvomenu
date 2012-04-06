@@ -2,12 +2,12 @@ class Polvo::Menu
   attr_accessor :editor
   def initialize(rootdirs, options={})
     self.editor = options[:editor] || ENV['EDITOR'] || 'vim'
-    @rootdirs = rootdirs
+    @rootdirs = rootdirs.collect! { |d| d.sub(/\/*$/,'') }
   end
 
   def render(cur_dir = '.', options={})
-    items_info = self.calc_menu(cur_dir)
-    show_menu items_info, options
+    items_info = self.calc_menu cur_dir
+    return show_menu items_info, options
   end
 
   def calc_menu(cur_dir, options={})
@@ -31,16 +31,16 @@ class Polvo::Menu
 
   private
   def exec_item(item, options={})
-    Polvo::Printer.clear
+    Polvo::IO.clear
     path = "#{item['rootdir']}/#{item['path']}"
     if File.directory?(path)
       return "Empty directory!" if Dir.entries(path).sort == ['.','..','info.menu']
       return "Empty directory!" if Dir.entries(path).sort == ['.','..']
       options['title'] = item['title']
-      self.render item['path'], options 
+      exit unless self.render item['path'], options 
     else
       system(path)
-      Polvo::Printer.wait
+      Polvo::IO.wait
     end
     return nil
   end
@@ -55,12 +55,13 @@ class Polvo::Menu
       menu_opts.push("#{title}\t"+"#{rootdir}/#{path}".magenta)
     end
     
-    choice = Polvo::Printer.menu(menu_opts,options)
+    choice = Polvo::IO.menu(menu_opts,options)
     options.delete 'warn'
-    Polvo::Printer.clear
+    Polvo::IO.clear
     
     return true  if choice == ''
     return false if choice == '0'
+
     if choice_valid?(choice,items_info.length+1)
       int_choice = Integer(choice)
       warn = exec_item(items_info[a[int_choice-1]],options)
@@ -68,7 +69,7 @@ class Polvo::Menu
     else
       options['warn'] = "'#{choice}' is not a valid option!" 
     end
-    show_menu items_info, options
+    res = show_menu items_info, options
     options.delete 'warn'
     return
   end
@@ -78,11 +79,11 @@ class Polvo::Menu
       if choice == ''
         return true
       else
-        #Polvo::Printer.warn("'#{choice}' is not a valid option!")
+        #Polvo::IO.warn("'#{choice}' is not a valid option!")
         return false
       end
     unless int_choice < max and int_choice >= 0
-      #Polvo::Printer.warn("'#{choice}' is not a valid option!")
+      #Polvo::IO.warn("'#{choice}' is not a valid option!")
       return false
     end
     return true
@@ -98,7 +99,12 @@ class Polvo::Menu
       info['type'] = 'dir'
       return info
     else
-      return { 'title' => File.basename(dir), 'type' => 'dir', 'path' => dir, 'rootdir' => rootdir }
+      return {
+        'title' => File.basename(dir),
+        'type' => 'dir',
+        'path' => dir,
+        'rootdir' => rootdir
+      }
     end
   end
     
@@ -111,7 +117,13 @@ class Polvo::Menu
       os = $1 || 'all'
     end
     #if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
-    return { 'title' => title, 'os' => os, 'type' => 'script','path' => file, 'rootdir' => rootdir}
+    return {
+      'title' => title,
+      'os' => os,
+      'type' => 'script',
+      'path' => file, 
+      'rootdir' => rootdir
+    }
   end
 
 end
