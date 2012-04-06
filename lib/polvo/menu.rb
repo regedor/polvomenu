@@ -2,7 +2,7 @@ class Polvo::Menu
   attr_accessor :editor
   def initialize(rootdirs, options={})
     self.editor = options[:editor] || ENV['EDITOR'] || 'vim'
-    @rootdirs = rootdirs
+    @rootdirs = rootdirs.collect! { |d| d.sub(/\/*$/,'') }
   end
 
   def render(cur_dir = '.', options={})
@@ -111,7 +111,13 @@ class Polvo::Menu
       os = $1 || 'all'
     end
     #if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
-    return { 'title' => title, 'os' => os, 'type' => 'script','path' => file, 'rootdir' => rootdir}
+    return {
+      'title' => title,
+      'os' => os,
+      'type' => 'script',
+      'path' => file, 
+      'rootdir' => rootdir
+    }
   end
 
 end
