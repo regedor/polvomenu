@@ -10,6 +10,12 @@ unless Kernel.respond_to?(:require_relative)
   end
 end
 
+class Array
+  def to_menu
+    Polvo::IO.menu(self).to_i - 1 
+  end
+end
+
 require_relative 'polvo'
 require_relative 'polvo/menu/version'
 require_relative 'polvo/io'

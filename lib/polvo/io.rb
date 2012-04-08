@@ -54,32 +54,38 @@ module Polvo::IO
       printf "\n#{str} [y/n] ".yellow
       input = STDIN.gets.chomp
       return( %w{y Y yes YES}.any? {|v| v == input} )
-      puts
     end
     
     def ask(str)
       printf "\n#{str}"
       return STDIN.gets.chomp
-      puts
     end
    
+   
+    # items can be hashes or string. 
+    #   Sample: 
+    #      [{:answer => "gt", :label => "option 1"}, {:answer => "0", :label => "option 2"}] 
+    #      ["option 1", "option 2"] 
+    #        
+    #      Always returns the array index position
     def menu(items,options = {})
-      # Clear screen, show title and drescription
       question = options['question'] || 'Choice: '
+      
+      #Print Menu header
       self.clear                     unless options['noclear']
       self.h1(options['title'])      if options['title']
       self.p(options['description']) if options['description']
 
       # Print menu options
-      i = 0 
+      normal_items_counter = 0 
       items.each do |item|
-        if item.class == 'Hash'
+        if item.is_a? Hash
           opt = sprintf("%5s",item[:answer]).gsub!(/\s(\w)/,'[\1')
           puts "#{opt}] #{item[:label]}"
         else
-          opt = (sprintf "%5d",i+1).gsub!(/\s(\d)/,'[\1')
+          normal_items_counter+=1
+          opt = (sprintf "%5d",normal_items_counter).gsub!(/\s(\d)/,'[\1')
           puts "#{opt}] #{item}"
-          i+=1
         end
       end
 
@@ -89,7 +95,9 @@ module Polvo::IO
       choice = self.ask(question)
       
       # Parse user choice
-      if option = parse_choice(choice,items.count+1,options)
+      more_acceptable_answers = options[:extra_answers] || [] 
+      items.each { |i| more_acceptable_answers << i[:answer] if i.is_a?(Hash) }
+      if option = parse_choice(choice, normal_items_counter, options[:extended_options], more_acceptable_answers)
         return option
       else
         options['warn'] = "'#{choice}' is not a valid option!" 
@@ -97,29 +105,7 @@ module Polvo::IO
       end
     end
     
-    def parse_choice(choice, max, options = {})
-      # Normal mode (accepts only integers > 0 and <= max, ex: '3')
-      if choice =~ /^\d+$/
-        int_choice = Integer(choice)
-        return int_choice if int_choice > 0 and int_choice <= max
-      end
-
-      # Extended mode (accepts integers followed by anything, ex: '3e file')
-      if options[:extended_options]
-        if choice =~ /^(\d+)(.*?)$/
-          int_choice = '\1'
-          args = '\2'
-          return { :option => '\1', :args => '\2' } if int_choice > 0 and int_choice <= max
-        end
-      end
-      
-      # Extra answers (ex: '', '0', 'weird option')
-      if options[:extra_answers]
-        return choice if options[:extra_answers].include?(choice)
-      end
-
-      return false
-    end
+    
     
     # --------------------------------------
     #  More useful methods
@@ -134,6 +120,26 @@ module Polvo::IO
     
     def debug(str)
       puts str.magenta
+    end
+    
+  private
+  
+    # Extended mode (accepts integers followed by anything, ex: '3e file')
+    # Extra answers (ex: '', '0', 'weird option')
+    def parse_choice(choice, max, extended_options, more_acceptable_answers=[])
+      # Normal mode (accepts only integers > 0 and <= max, ex: '3')
+      if choice =~ /^\d+$/ && int_choice = choice.to_i 
+        return choice if int_choice > 0 && int_choice < max
+      end
+      return choice if more_acceptable_answers.include?(choice)
+      if extended_options
+        if choice =~ /^(\d+)/ 
+          int_choice = $1.to_i 
+          return choice if int_choice > 0 && int_choice <= max
+        end
+        return choice if more_acceptable_answers.map { |a| /^#{Regexp.escape(a)}/ }.any? {|regexp| choice =~ regexp }
+      end
+      return false
     end
     
   end
