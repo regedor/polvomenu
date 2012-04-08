@@ -62,29 +62,73 @@ describe Polvo::IO do
   describe ".menu" do
     subject {Polvo::IO}
     items                   = ["Option 1","Option 2","Option 3","Option 4"]
-    items_advanced          = ["Option 1","Option 2","Option 3","Option 4",{:label => "All of them", :answer => "all"}]
     valid_answer            = "3"
-    invalid_answer          = "7"
-    valid_answer_with_args = "3d lol"
+    invalid_answer_n1       = "6"
+    invalid_answer          = "6"
+    items_advanced          = ["Option 1","Option 2","Option 3",{:label => "All of them", :answer => "all"},"Option 4"]
     extra_answers           = ["7","","lol","sdf"]
+    extra_answer            = "7"
+    valid_answer_with_args  = "3d lol"
+
     
     it "should not acept invalid answer" do
       $stdin.should_receive(:gets).and_return(invalid_answer,valid_answer)
       subject.menu(items).should == valid_answer
     end
     
+    it "should not acept answer '0'" do
+      $stdin.should_receive(:gets).and_return("0",valid_answer)
+      subject.menu(items).should == valid_answer
+    end
+    
+    it "should not acept answer 'n+1' for 'n' sized items  " do
+      $stdin.should_receive(:gets).and_return(invalid_answer_n1,valid_answer)
+      subject.menu(items).should == valid_answer
+    end
+    
     it "should acept answer with args if extended_option is true" do
-      $stdin.should_receive(:gets).and_retur(valid_answer_with_args)
-      subject.menu(items, :extended_option => true).should == valid_answer_with_args
+      $stdin.should_receive(:gets).and_return(valid_answer_with_args)
+      subject.menu(items, :extended_options => true).should == valid_answer_with_args
     end
  
     it "should not acept invalid answer if extended_option is true" do
       $stdin.should_receive(:gets).and_return(invalid_answer, valid_answer)
-      subject.menu(items, :extended_option => true).should == valid_answer
+      subject.menu(items, :extended_options => true).should == valid_answer
     end
     
-    it "should have more tests" do
-      pending "write tests or I will kneecap you"
+    it "should accept '7' if receives extra_answers with it" do
+      $stdin.should_receive(:gets).and_return(extra_answer)
+      subject.menu(items_advanced,:extra_answers => extra_answers).should == extra_answer
+    end
+    
+    it "should accept all if receives extra_answers with it" do
+      $stdin.should_receive(:gets).and_return("all")
+      subject.menu(items_advanced).should == "all"
+    end
+    
+    it "should not accept extended options if not specified" do
+      $stdin.should_receive(:gets).and_return("all kaka", "all")
+      subject.menu(items_advanced).should == "all"
+    end
+    
+    it "should accept extended options if specified" do
+      $stdin.should_receive(:gets).and_return("all kaka")
+      subject.menu(items_advanced,:extended_options => true).should == "all kaka"
+    end
+    
+    it "should not accept invalid answer even with extra answers" do
+      $stdin.should_receive(:gets).and_return(invalid_answer,extra_answer)
+      subject.menu(items, :extended_option => false, :extra_answers => extra_answers).should == extra_answer
+    end
+    
+    it "should not accept 5 when number of normal items in the items array is < 5" do
+      $stdin.should_receive(:gets).and_return("5",valid_answer)
+      subject.menu(items_advanced).should == valid_answer
+    end
+    
+    it "should accept option n where n is the number of normal items in the items array" do
+      $stdin.should_receive(:gets).and_return("5",valid_answer)
+      subject.menu(items_advanced).should == valid_answer
     end
     
   end
