@@ -26,12 +26,7 @@ describe Polvo::Menu do
   end
   
   describe "#generate_menu_items" do
-    
 
-    
-    
-
-    
     it "should generate a simple menu" do
       menu = Polvo::Menu.new ["spec/fixtures/rootdir3/"]
       items_representation = menu.generate_menu_items(".") 
@@ -39,18 +34,35 @@ describe Polvo::Menu do
 
     end
     
-   # Polvo::Menu.new ["spec/fixtures/rootdir1/"]
-   # it "should generate a simple menu" do
-   #   items_representation = menu.generate_menu_items("dir1") 
-   #   items_representation.should == [
-   #     { "title"=>"dir1", 
-   #       "type"=>"dir", 
-   #       "path"=>"./dir1", 
-   #       "rootdir"=>"spec/fixtures/rootdir2"}, 
-   #   ]      
-   # end
-  
-
+    it "should generate a simple menu" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir1/"]
+      items_representation = menu.generate_menu_items("dir1") 
+      items_representation.should == fixtures_folder("rootdir1/dir1")       
+    end
+    
+    it "should merge with priority to second folder" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir1/","spec/fixtures/rootdir2"]
+      items_representation = menu.generate_menu_items(".") 
+      items_representation.sort {|a,b| full_path(a) <=> full_path(b) }.should == [
+        (fixtures_folder "rootdir2/dir1", :single => true) ,
+        (fixtures_folder "rootdir2/dir2", :single => true) ,
+        (fixtures_folder "rootdir1/dir3", :single => true) ,
+        (fixtures_folder "rootdir2/dir4", :single => true) ,
+        (fixtures_folder "rootdir2/dir5", :single => true) ,    
+      ].sort {|a,b| full_path(a) <=> full_path(b) }
+    end
+    
+    it "should merge with priority to second folder" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir2/","spec/fixtures/rootdir1"]
+      items_representation = menu.generate_menu_items(".") 
+      items_representation.sort {|a,b| full_path(a) <=> full_path(b) }.should == [
+        (fixtures_folder "rootdir1/dir1", :single => true) ,
+        (fixtures_folder "rootdir1/dir2", :single => true) ,
+        (fixtures_folder "rootdir1/dir3", :single => true) ,
+        (fixtures_folder "rootdir2/dir4", :single => true) ,
+        (fixtures_folder "rootdir2/dir5", :single => true) ,    
+      ].sort {|a,b| full_path(a) <=> full_path(b) }
+    end
   
   end  
 end

@@ -23,7 +23,7 @@ class Polvo::Menu
       next unless File.exists? "#{rootdir}/#{cur_dir}"
       
       Dir.foreach("#{rootdir}/#{cur_dir}") do |item|
-        next if item == '.' or item == '..' or item == 'info.menu'
+        next if item == 'info.menu' or item =~ /^\./
         path = "#{cur_dir}/#{item}"
         items_info[path] = if File.directory? "#{rootdir}/#{path}"
           get_dir_info(rootdir,path)
