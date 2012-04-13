@@ -1,4 +1,9 @@
 require 'spec_helper'
+module Polvo::IO
+  #for better looking tests
+  def self.system(command);return if command == "clear";super;end
+end
+
 
 describe Polvo::IO do
   before(:each) do
@@ -130,12 +135,21 @@ describe Polvo::IO do
       $stdin.should_receive(:gets).and_return("5",valid_answer)
       subject.menu(items_advanced).should == valid_answer
     end
-    
+
   end
   
-  it ".clear should have tests" do
-    pending "write tests or I will kneecap you"
+  it ".clear should clear the screen" do
+    subject.should_receive(:debug_mode?).and_return(false)
+    subject.should_receive(:system).with("clear")
+    subject.clear
   end
+  
+  it ".clear should not clear the screen if in debug mode" do
+    subject.should_receive(:debug_mode?).and_return(true)
+    subject.clear
+    @output.should =~ /^\n\n\n\n$/i
+  end
+
 
 end
 

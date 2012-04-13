@@ -104,14 +104,17 @@ module Polvo::IO
         return self.menu(items,options)
       end
     end
-    
+       
+    def debug_mode?
+      ENV['POLVO_DEBUG']
+    end
     
     
     # --------------------------------------
     #  More useful methods
     # --------------------------------------
     def clear
-      if ENV['POLVO_DEBUG']
+      if debug_mode?
         puts "\n\n\n\n"
       else
         system('clear')
