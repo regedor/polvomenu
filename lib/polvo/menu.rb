@@ -6,11 +6,34 @@ class Polvo::Menu
   end
 
   def render(cur_dir = '.', options={})
-    items_info = self.calc_menu cur_dir
+    items_info = self.generate_menu_items cur_dir
     return show_menu items_info, options
   end
 
-  private
+  #private
+  
+  def is_mac?
+    `uname`.chomp == "Darwin"
+  end
+  
+  def generate_menu_items(cur_dir, options={})
+    items_info = Hash.new
+    previous_type = 'dir'
+    @rootdirs.sort.each do |rootdir|
+      next unless File.exists? "#{rootdir}/#{cur_dir}"
+      
+      Dir.foreach("#{rootdir}/#{cur_dir}") do |item|
+        next if item == '.' or item == '..' or item == 'info.menu'
+        path = "#{cur_dir}/#{item}"
+        items_info[path] = if File.directory? "#{rootdir}/#{path}"
+          get_dir_info(rootdir,path)
+        else
+          get_script_info(rootdir,path)
+        end
+      end
+    end
+    return items_info.values
+  end
   
   def show_menu(items_info,options={})
     menu_opts = Array.new
@@ -39,25 +62,6 @@ class Polvo::Menu
     res = show_menu items_info, options
     options.delete 'warn'
     return res
-  end
-  
-  def calc_menu(cur_dir, options={})
-   items_info = Hash.new
-   previous_type = 'dir'
-    @rootdirs.sort.each do |rootdir|
-      next unless File.exists? "#{rootdir}/#{cur_dir}"
-      
-      Dir.foreach("#{rootdir}/#{cur_dir}") do |item|
-        next if item == '.' or item == '..' or item == 'info.menu'
-        path = "#{cur_dir}/#{item}"
-        items_info[path] = if File.directory? "#{rootdir}/#{path}"
-          get_dir_info(rootdir,path)
-        else
-          get_script_info(rootdir,path)
-        end
-      end
-    end
-    return items_info
   end
 
   def exec_item(item, options={})
