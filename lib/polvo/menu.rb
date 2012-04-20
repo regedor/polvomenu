@@ -19,7 +19,7 @@ class Polvo::Menu
   def generate_menu_items(cur_dir, options={})
     items_info = Hash.new
     previous_type = 'dir'
-    @rootdirs.sort.each do |rootdir|
+    @rootdirs.each do |rootdir|
       next unless File.exists? "#{rootdir}/#{cur_dir}"
       
       Dir.foreach("#{rootdir}/#{cur_dir}") do |item|
@@ -123,7 +123,9 @@ class Polvo::Menu
     if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
       os = $1 || 'all'
     end
-    #if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
+    # priority
+    # hidden
+    # description
     return {
       :title => title,
       'os' => os,
