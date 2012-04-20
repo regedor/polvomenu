@@ -147,11 +147,23 @@ describe Polvo::Menu do
     end
 
 # Next tests:
-#
-# it "should show only Ubuntu/all scripts if OS is Ubuntu"
-# it "should show only MacOS/all scripts if OS is MacOS"
-#
-# it "should warn when directory is empty"
+
+    it "should show only Ubuntu/all scripts if OS is Ubuntu" do
+      pending "This is not yet implemented!"
+    end
+    
+    it "should show only MacOS/all scripts if OS is MacOS" do
+      pending "This is not yet implemented!"
+    end
+    
+    it "should warn when directory is empty" do
+      pending "This is not yet implemented!"
+    end
+    
+    it "should bla bla bla descriptions" do
+      pending "This is not yet implemented!"
+    end
+
   end  
 
 end

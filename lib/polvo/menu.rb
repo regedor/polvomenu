@@ -119,6 +119,7 @@ class Polvo::Menu
     return nil unless File.exist?(full_path)
     return nil if File.directory?(full_path)
     filestr = IO.read("#{rootdir}/#{file}")
+
     if filestr =~ /^#\stitle:\s*([^\n]*)\s*$/
       title = $1 || ''
     end
@@ -132,7 +133,7 @@ class Polvo::Menu
       hidden = $1.to_i || 0
       return nil if hidden == 1
     end
-    # description
+    # missing: description
     return {
       :title    => title,
       :os       => os,
