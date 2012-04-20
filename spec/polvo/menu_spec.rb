@@ -136,12 +136,21 @@ describe Polvo::Menu do
       priority_ordered_items.collect {|i| i[:title]}.should == ['Ruby script', 'Bash script', 'Perl script']
     end
 
+    it "should not show folder if it contains info.menu with 'hidden' setting" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir3/"]
+      items = menu.generate_menu_items('dira').collect {|i| i[:path] }.should_not include 'dira/dir_hidden'
+    end
+
+    it "should not show script if it contains 'hidden' setting" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir3/"]
+      items = menu.generate_menu_items('dira').collect {|i| i[:path] }.should_not include 'dira/script_hidden'
+    end
+
 # Next tests:
 #
 # it "should show only Ubuntu/all scripts if OS is Ubuntu"
 # it "should show only MacOS/all scripts if OS is MacOS"
 #
-# it "should not show folder if folder contains info.menu with 'hidden' setting"
 # it "should warn when directory is empty"
   end  
 

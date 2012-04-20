@@ -25,11 +25,12 @@ class Polvo::Menu
       Dir.foreach("#{rootdir}/#{cur_dir}") do |item|
         next if item == 'info.menu' or item =~ /^\./
         path = "#{cur_dir}/#{item}"
-        items_info[path] = if File.directory? "#{rootdir}/#{path}"
+        cur_item_info = if File.directory? "#{rootdir}/#{path}"
           get_dir_info(rootdir,path)
         else
           get_script_info(rootdir,path)
         end
+        items_info[path] = cur_item_info unless cur_item_info.nil?
       end
     end
     return items_info.values.sort {|a,b| [(a[:priority] || 0), a[:title] ] <=> [(b[:priority] || 0), b[:title]] }
@@ -99,6 +100,7 @@ class Polvo::Menu
       return get_script_info rootdir,"#{dir}/exec.bash"
     elsif File.exist? "#{rootdir}/#{dir}/info.menu"
       info = get_script_info rootdir,"#{dir}/info.menu"
+      return nil if info.nil?
       info[:path] = dir
       info[:type] = 'dir'
       return info
@@ -125,8 +127,11 @@ class Polvo::Menu
     end
     if filestr =~ /^#\spriority:\s*(\d*)\s*$/
       priority = $1.to_i || 0
+    end    
+    if filestr =~ /^#\shidden:\s*(\d*)\s*$/
+      hidden = $1.to_i || 0
+      return nil if hidden == 1
     end
-    # hidden
     # description
     return {
       :title    => title,
