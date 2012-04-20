@@ -19,23 +19,23 @@ def fixtures_folder(string_path, options={})
   rootdirs = [ 
     {'rootdir1' => [
       {'dir1' => [
-        {'dirb1.1' => [], :items_for_parent => {"title"=>"dir1.1", "type"=>"dir", "path"=>"dir1/dir1.1", "rootdir"=>"spec/fixtures/rootdir1"}}, 
-        {'dirc1.2' => [], :items_for_parent => {"title"=>"dir1.2", "type"=>"dir", "path"=>"dir1/dir1.2", "rootdir"=>"spec/fixtures/rootdir1"}}        
-      ], :items_for_parent => { "title"=>"dir1", "type"=>"dir", "path"=>"./dir1", "rootdir"=>"spec/fixtures/rootdir1" }}, 
-      {'dir2' => [], :items_for_parent => { "title"=>"dir2", "type"=>"dir", "path"=>"./dir2", "rootdir"=>"spec/fixtures/rootdir1" }}, 
-      {'dir3' => [], :items_for_parent => { "title"=>"This is an exec.bash inside rootdir1/dir3", "os"=>"ubuntu", "type"=>"script", "path"=>"./dir3/exec.bash", "rootdir"=>"spec/fixtures/rootdir1" }}
-    ], :items_for_parent => { "title"=>"dir1", "type"=>"dir", "path"=>"./dir1", "rootdir"=>"spec/fixtures/rootdir1" }},
+        {'dirb1.1' => [], :items_for_parent => {:title=>"dir1.1", :type=>"dir", :path=>"dir1/dir1.1", :rootdir=>"spec/fixtures/rootdir1"}}, 
+        {'dirc1.2' => [], :items_for_parent => {:title=>"dir1.2", :type=>"dir", :path=>"dir1/dir1.2", :rootdir=>"spec/fixtures/rootdir1"}}        
+      ], :items_for_parent => { :title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir1" }}, 
+      {'dir2' => [], :items_for_parent => { :title=>"dir2", :type=>"dir", :path=>"./dir2", :rootdir=>"spec/fixtures/rootdir1" }}, 
+      {'dir3' => [], :items_for_parent => { :title=>"This is an exec.bash inside rootdir1/dir3", "os"=>"ubuntu", :type=>"script", :path=>"./dir3/exec.bash", :rootdir=>"spec/fixtures/rootdir1" }}
+    ], :items_for_parent => { :title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir1" }},
     {'rootdir2' => [
-      {'dir1' => [], :items_for_parent => {"title"=>"dir1", "type"=>"dir", "path"=>"./dir1", "rootdir"=>"spec/fixtures/rootdir2"}},
-      {'dir2' => [], :items_for_parent => {"title"=>"dir2", "type"=>"dir", "path"=>"./dir2", "rootdir"=>"spec/fixtures/rootdir2"}}, 
-      {'dir4' => [], :items_for_parent => {"title"=>"This is an info.menu in rootdir2/dir4", "os"=>"all", "type"=>"dir", "path"=>"./dir4", "rootdir"=>"spec/fixtures/rootdir2"}},
-      {'dir5' => [], :items_for_parent => {"title"=>"dir5", "type"=>"dir", "path"=>"./dir5", "rootdir"=>"spec/fixtures/rootdir2"}}
-    ], :items_for_parent => { "title"=>"dir1", "type"=>"dir", "path"=>"./dir1", "rootdir"=>"spec/fixtures/rootdir1" }},
+      {'dir1' => [], :items_for_parent => {:title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir2"}},
+      {'dir2' => [], :items_for_parent => {:title=>"dir2", :type=>"dir", :path=>"./dir2", :rootdir=>"spec/fixtures/rootdir2"}}, 
+      {'dir4' => [], :items_for_parent => {:title=>"This is an info.menu in rootdir2/dir4", "os"=>"all", :type=>"dir", :path=>"./dir4", :rootdir=>"spec/fixtures/rootdir2"}},
+      {'dir5' => [], :items_for_parent => {:title=>"dir5", :type=>"dir", :path=>"./dir5", :rootdir=>"spec/fixtures/rootdir2"}}
+    ], :items_for_parent => { :title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir1" }},
     {'rootdir3' => [
-      {'dira' => [], :items_for_parent => {"title"=>"dira", "type"=>"dir", "path"=>"./dira", "rootdir"=>"spec/fixtures/rootdir3"}}, 
-      {'dirb' => [], :items_for_parent => {"title"=>"dirb", "type"=>"dir", "path"=>"./dirb", "rootdir"=>"spec/fixtures/rootdir3"}}, 
-      {'dirc' => [], :items_for_parent => {"title"=>"dirc", "type"=>"dir", "path"=>"./dirc", "rootdir"=>"spec/fixtures/rootdir3"}}
-    ], :items_for_parent => { "title"=>"dir1", "type"=>"dir", "path"=>"./dir1", "rootdir"=>"spec/fixtures/rootdir1" }},
+      {'dira' => [], :items_for_parent => {:title=>"dira", :type=>"dir", :path=>"./dira", :rootdir=>"spec/fixtures/rootdir3"}}, 
+      {'dirb' => [], :items_for_parent => {:title=>"dirb", :type=>"dir", :path=>"./dirb", :rootdir=>"spec/fixtures/rootdir3"}}, 
+      {'dirc' => [], :items_for_parent => {:title=>"dirc", :type=>"dir", :path=>"./dirc", :rootdir=>"spec/fixtures/rootdir3"}}
+    ], :items_for_parent => { :title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir1" }},
   ]
   x = path.inject(rootdirs) do |result, path| 
     result.inject(:merge)[path]

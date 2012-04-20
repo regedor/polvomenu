@@ -32,16 +32,16 @@ class Polvo::Menu
         end
       end
     end
-    return items_info.values
+    return items_info.values.sort {|a,b| [(a[:priority] || 0), a[:title] ] <=> [(b[:priority] || 0), b[:title]] }
   end
   
   def show_menu(items_info,options={})
     menu_opts = Array.new
     a = items_info.keys.sort
     a.each do |item|
-      title   = items_info[item]['title']
-      path    = items_info[item]['path']
-      rootdir = items_info[item]['rootdir']
+      title   = items_info[item][:title]
+      path    = items_info[item][:path]
+      rootdir = items_info[item][:rootdir]
       menu_opts.push("#{title}\t"+"#{rootdir}/#{path}".magenta)
     end
     
@@ -66,12 +66,12 @@ class Polvo::Menu
 
   def exec_item(item, options={})
     Polvo::IO.clear
-    path = "#{item['rootdir']}/#{item['path']}"
+    path = "#{item[:rootdir]}/#{item[:path]}"
     if File.directory?(path)
       return "Empty directory!" if Dir.entries(path).sort == ['.','..','info.menu']
       return "Empty directory!" if Dir.entries(path).sort == ['.','..']
-      options['title'] = item['title']
-      exit unless self.render item['path'], options 
+      options[:title] = item[:title]
+      exit unless self.render item[:path], options 
     else
       system(path)
       Polvo::IO.wait
@@ -102,15 +102,15 @@ class Polvo::Menu
       return get_script_info rootdir,"#{dir}/exec.bash"
     elsif File.exist? "#{rootdir}/#{dir}/info.menu"
       info = get_script_info rootdir,"#{dir}/info.menu"
-      info['path'] = dir
-      info['type'] = 'dir'
+      info[:path] = dir
+      info[:type] = 'dir'
       return info
     else
       return {
-        'title' => File.basename(dir),
-        'type' => 'dir',
-        'path' => dir,
-        'rootdir' => rootdir
+        :title => File.basename(dir),
+        :type => 'dir',
+        :path => dir,
+        :rootdir => rootdir
       }
     end
   end
@@ -125,11 +125,11 @@ class Polvo::Menu
     end
     #if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
     return {
-      'title' => title,
+      :title => title,
       'os' => os,
-      'type' => 'script',
-      'path' => file, 
-      'rootdir' => rootdir
+      :type => 'script',
+      :path => file, 
+      :rootdir => rootdir
     }
   end
 
