@@ -23,12 +23,12 @@ def fixtures_folder(string_path, options={})
         {'dirc1.2' => [], :items_for_parent => {:title=>"dir1.2", :type=>"dir", :path=>"dir1/dir1.2", :rootdir=>"spec/fixtures/rootdir1"}}        
       ], :items_for_parent => { :title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir1" }}, 
       {'dir2' => [], :items_for_parent => { :title=>"dir2", :type=>"dir", :path=>"./dir2", :rootdir=>"spec/fixtures/rootdir1" }}, 
-      {'dir3' => [], :items_for_parent => { :title=>"This is an exec.bash inside rootdir1/dir3", :os=>"ubuntu", :type=>"script", :path=>"./dir3/exec.bash", :rootdir=>"spec/fixtures/rootdir1" }}
+      {'dir3' => [], :items_for_parent => { :title=>"This is an exec.bash inside rootdir1/dir3", :priority=>0,:os=>"ubuntu", :type=>"script", :path=>"./dir3/exec.bash", :rootdir=>"spec/fixtures/rootdir1" }}
     ], :items_for_parent => { :title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir1" }},
     {'rootdir2' => [
       {'dir1' => [], :items_for_parent => {:title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir2"}},
       {'dir2' => [], :items_for_parent => {:title=>"dir2", :type=>"dir", :path=>"./dir2", :rootdir=>"spec/fixtures/rootdir2"}}, 
-      {'dir4' => [], :items_for_parent => {:title=>"This is an info.menu in rootdir2/dir4", :os=>"all", :type=>"dir", :path=>"./dir4", :rootdir=>"spec/fixtures/rootdir2"}},
+      {'dir4' => [], :items_for_parent => {:title=>"This is an info.menu in rootdir2/dir4", :priority=>0, :os=>"all", :type=>"dir", :path=>"./dir4", :rootdir=>"spec/fixtures/rootdir2"}},
       {'dir5' => [], :items_for_parent => {:title=>"dir5", :type=>"dir", :path=>"./dir5", :rootdir=>"spec/fixtures/rootdir2"}}
     ], :items_for_parent => { :title=>"dir1", :type=>"dir", :path=>"./dir1", :rootdir=>"spec/fixtures/rootdir1" }},
     {'rootdir3' => [

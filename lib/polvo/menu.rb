@@ -123,15 +123,18 @@ class Polvo::Menu
     if filestr =~ /^#\sos:\s*([^\n]*)\s*$/
       os = $1 || 'all'
     end
-    # priority
+    if filestr =~ /^#\spriority:\s*(\d*)\s*$/
+      priority = $1.to_i || 0
+    end
     # hidden
     # description
     return {
-      :title => title,
-      :os => os,
-      :type => 'script',
-      :path => file, 
-      :rootdir => rootdir
+      :title    => title,
+      :os       => os,
+      :type     => 'script',
+      :path     => file, 
+      :priority => priority || 0,
+      :rootdir  => rootdir
     }
   end
 

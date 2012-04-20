@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'pp'
 
 describe Polvo::Menu do
   subject { Polvo::Menu.new ["spec/fixtures/rootdir1/", "spec/fixtures/rootdir2"] }
@@ -75,6 +76,7 @@ describe Polvo::Menu do
       subject.should_receive(:get_script_info)#.with("rootdir2","dir4/info.menu")
       subject.get_dir_info('spec/fixtures/rootdir2','dir4')
     end
+
   end
     
   describe "#generate_menu_items" do
@@ -121,14 +123,25 @@ describe Polvo::Menu do
       ].sort {|a,b| [(a[:priority] || 0), a[:title] ] <=> [(b[:priority] || 0), b[:title]] }
     end
     
+    it "should ignore dotfiles and info.menu" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir3/"]
+      items_basenames = menu.generate_menu_items('dirb/dirb1').collect {|i| File.basename(i[:path]) }
+      items_basenames.each {|n| n.should_not match /^\./ } 
+      items_basenames.each {|n| n.should_not match /^info.menu$/ } 
+    end
+
+    it "should sort by priority then alphabetically" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir3/"]
+      priority_ordered_items = menu.generate_menu_items('dirb/dirb1')
+      priority_ordered_items.collect {|i| i[:title]}.should == ['Ruby script', 'Bash script', 'Perl script']
+    end
+
 # Next tests:
 #
 # it "should show only Ubuntu/all scripts if OS is Ubuntu"
 # it "should show only MacOS/all scripts if OS is MacOS"
-# it "should sort by priority then alphabetically"
 #
 # it "should not show folder if folder contains info.menu with 'hidden' setting"
-# it "should ignore dotfiles and info.menu"
 # it "should warn when directory is empty"
   end  
 
