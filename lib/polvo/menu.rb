@@ -19,17 +19,18 @@ class Polvo::Menu
   def generate_menu_items(cur_dir, options={})
     items_info = Hash.new
     previous_type = 'dir'
-    @rootdirs.sort.each do |rootdir|
+    @rootdirs.each do |rootdir|
       next unless File.exists? "#{rootdir}/#{cur_dir}"
       
       Dir.foreach("#{rootdir}/#{cur_dir}") do |item|
         next if item == 'info.menu' or item =~ /^\./
         path = "#{cur_dir}/#{item}"
-        items_info[path] = if File.directory? "#{rootdir}/#{path}"
+        cur_item_info = if File.directory? "#{rootdir}/#{path}"
           get_dir_info(rootdir,path)
         else
           get_script_info(rootdir,path)
         end
+        items_info[path] = cur_item_info unless cur_item_info.nil?
       end
     end
     return items_info.values.sort {|a,b| [(a[:priority] || 0), a[:title] ] <=> [(b[:priority] || 0), b[:title]] }
@@ -79,8 +80,6 @@ class Polvo::Menu
     return nil
   end
 
-  
-  
   def choice_valid?(choice,max)
     int_choice = Integer(choice) rescue
       if choice == ''
@@ -95,41 +94,53 @@ class Polvo::Menu
     end
     return true
   end
-  
-  
+
   def get_dir_info(rootdir,dir)
     if File.exist? "#{rootdir}/#{dir}/exec.bash"
       return get_script_info rootdir,"#{dir}/exec.bash"
     elsif File.exist? "#{rootdir}/#{dir}/info.menu"
       info = get_script_info rootdir,"#{dir}/info.menu"
+      return nil if info.nil?
       info[:path] = dir
       info[:type] = 'dir'
       return info
     else
       return {
-        :title => File.basename(dir),
-        :type => 'dir',
-        :path => dir,
-        :rootdir => rootdir
+        :title    => File.basename(dir),
+        :type     => 'dir',
+        :path     => dir,
+        :rootdir  => rootdir
       }
     end
   end
     
   def get_script_info(rootdir,file)
+    full_path = "#{rootdir}/#{file}"
+    return nil unless File.exist?(full_path)
+    return nil if File.directory?(full_path)
     filestr = IO.read("#{rootdir}/#{file}")
-    if filestr =~ /^#\stitle:\s*([^\n]*)\s*\n/
+
+    if filestr =~ /^#\stitle:\s*([^\n]*)\s*$/
       title = $1 || ''
     end
-    if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
+    if filestr =~ /^#\sos:\s*([^\n]*)\s*$/
       os = $1 || 'all'
     end
-    #if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
+    if filestr =~ /^#\spriority:\s*(\d*)\s*$/
+      priority = $1.to_i || 0
+    end    
+    if filestr =~ /^#\shidden:\s*(\d*)\s*$/
+      hidden = $1.to_i || 0
+      return nil if hidden == 1
+    end
+    # missing: description
     return {
-      :title => title,
-      'os' => os,
-      :type => 'script',
-      :path => file, 
-      :rootdir => rootdir
+      :title    => title,
+      :os       => os,
+      :type     => 'script',
+      :path     => file, 
+      :priority => priority || 0,
+      :rootdir  => rootdir
     }
   end
 
