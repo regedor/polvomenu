@@ -24,9 +24,66 @@ describe Polvo::Menu do
     end
     
   end
-  
+
+  describe "#get_script_info" do
+
+    it "should return a hash if file exists" do
+      subject.get_script_info('spec/fixtures/rootdir2','dir4/info.menu').class.should == Hash
+    end
+
+    it "should return nil if file does not exist" do
+      subject.get_script_info('spec/fixtures/rootdir0','dir0').should be_nil
+    end
+
+    it "should have :type == 'script' if option is script" do
+      subject.get_script_info('spec/fixtures/rootdir3','dira/script.rb')[:type].should == "script"
+    end
+  end
+
+  describe "#get_dir_info" do
+    it "should use folder name as title if folder does not contain info.menu" do
+      subject.get_dir_info('spec/fixtures/rootdir1','dir1')[:title].should == "dir1"
+    end    
+
+    it "should use info.menu to generate title if folder contains info.menu" do
+      subject.get_dir_info('spec/fixtures/rootdir1','dir3')[:title].should == "This is an exec.bash inside rootdir1/dir3"
+    end
+    
+    it "should have :path pointing to exec.bash if folder contains exec.bash" do
+      subject.get_dir_info('spec/fixtures/rootdir1','dir3')[:path].should == "dir3/exec.bash"
+    end
+
+    it "should have :path pointing to folder if folder does not contain exec.bash" do
+      subject.get_dir_info('spec/fixtures/rootdir1','dir1')[:path].should == "dir1"
+    end
+
+    it "should have :type == 'dir' if option is directory" do
+      subject.get_dir_info('spec/fixtures/rootdir3','dirb')[:type].should == "dir"
+    end
+
+    it "should have :type == 'script' if option is folder with exec.bash" do
+      subject.get_dir_info('spec/fixtures/rootdir1','dir3')[:type].should == "script"
+    end
+
+    it "should call get_script_info if folder contains exec.bash" do
+      subject.should_receive(:get_script_info).with("spec/fixtures/rootdir1","dir3/exec.bash")
+      subject.get_dir_info('spec/fixtures/rootdir1','dir3')
+    end
+
+    it "should call get_script_info if folder contains info.menu" do
+      pending "Does not work, can't figure out why!"
+      subject.should_receive(:get_script_info)#.with("rootdir2","dir4/info.menu")
+      subject.get_dir_info('spec/fixtures/rootdir2','dir4')
+    end
+  end
+    
   describe "#generate_menu_items" do
-# ordered alphabetically
+    it "should generate a menu ordered alphabetically by folders :title's" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir1"]
+      ordered_titles = menu.generate_menu_items(".").collect {|i| i[:title] }
+      ordered_titles.should == fixtures_folder("rootdir1").collect {|i| i[:title] }.sort
+    end
+
     it "should generate a menu with local path == '.'" do
       menu = Polvo::Menu.new ["spec/fixtures/rootdir3/"]
       items_representation = menu.generate_menu_items(".")
@@ -66,20 +123,14 @@ describe Polvo::Menu do
     
 # Next tests:
 #
-# it "should use folder name as title if folder does not contain info.menu"
-# it "should use info.menu to generate title if folder contains info.menu"
 # it "should show only Ubuntu/all scripts if OS is Ubuntu"
 # it "should show only MacOS/all scripts if OS is MacOS"
 # it "should sort by priority then alphabetically"
 #
-# it "should have :path pointing to exec.bash if folder contains exec.bash"
 # it "should not show folder if folder contains info.menu with 'hidden' setting"
-# it "should have :type == 'dir' if option is directory"
-# it "should have :type == 'script' if option is script"
-# it "should have :type == 'script' if option is folder with exec.bash"
 # it "should ignore dotfiles and info.menu"
 # it "should warn when directory is empty"
-
   end  
+
 end
 

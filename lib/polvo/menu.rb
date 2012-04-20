@@ -1,3 +1,5 @@
+require 'pp'
+
 class Polvo::Menu
   attr_accessor :editor
   def initialize(rootdirs, options={})
@@ -97,30 +99,35 @@ class Polvo::Menu
   end
   
   
+
   def get_dir_info(rootdir,dir)
     if File.exist? "#{rootdir}/#{dir}/exec.bash"
       return get_script_info rootdir,"#{dir}/exec.bash"
     elsif File.exist? "#{rootdir}/#{dir}/info.menu"
       info = get_script_info rootdir,"#{dir}/info.menu"
+      pp info
       info[:path] = dir
       info[:type] = 'dir'
       return info
     else
       return {
-        :title => File.basename(dir),
-        :type => 'dir',
-        :path => dir,
-        :rootdir => rootdir
+        :title    => File.basename(dir),
+        :type     => 'dir',
+        :path     => dir,
+        :rootdir  => rootdir
       }
     end
   end
     
   def get_script_info(rootdir,file)
+    full_path = "#{rootdir}/#{file}"
+    return nil unless File.exist?(full_path)
+    return nil if File.directory?(full_path)
     filestr = IO.read("#{rootdir}/#{file}")
-    if filestr =~ /^#\stitle:\s*([^\n]*)\s*\n/
+    if filestr =~ /^#\stitle:\s*([^\n]*)\s*$/
       title = $1 || ''
     end
-    if filestr =~ /^#\sos:\s*([^\n]*)\s*\n/
+    if filestr =~ /^#\sos:\s*([^\n]*)\s*$/
       os = $1 || 'all'
     end
     # priority
@@ -128,7 +135,7 @@ class Polvo::Menu
     # description
     return {
       :title => title,
-      'os' => os,
+      :os => os,
       :type => 'script',
       :path => file, 
       :rootdir => rootdir
