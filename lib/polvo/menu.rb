@@ -1,5 +1,3 @@
-require 'pp'
-
 class Polvo::Menu
   attr_accessor :editor
   def initialize(rootdirs, options={})
@@ -81,8 +79,6 @@ class Polvo::Menu
     return nil
   end
 
-  
-  
   def choice_valid?(choice,max)
     int_choice = Integer(choice) rescue
       if choice == ''
@@ -97,15 +93,12 @@ class Polvo::Menu
     end
     return true
   end
-  
-  
 
   def get_dir_info(rootdir,dir)
     if File.exist? "#{rootdir}/#{dir}/exec.bash"
       return get_script_info rootdir,"#{dir}/exec.bash"
     elsif File.exist? "#{rootdir}/#{dir}/info.menu"
       info = get_script_info rootdir,"#{dir}/info.menu"
-      pp info
       info[:path] = dir
       info[:type] = 'dir'
       return info
