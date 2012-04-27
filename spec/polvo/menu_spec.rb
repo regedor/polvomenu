@@ -146,6 +146,10 @@ describe Polvo::Menu do
       items = menu.generate_menu_items('dira').collect {|i| i[:path] }.should_not include 'dira/script_hidden'
     end
 
+    it "items should have description if header has description" do
+      pending "To do"
+    end
+
 # Next tests:
 
     it "should show only Ubuntu/all scripts if OS is Ubuntu" do
