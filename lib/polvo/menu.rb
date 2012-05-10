@@ -133,14 +133,17 @@ class Polvo::Menu
       hidden = $1.to_i || 0
       return nil if hidden == 1
     end
-    # missing: description
+    if filestr =~ /^#\sdescription:\s*(.*?\n(?:^#\s*.*?\n))*/
+        desc = $1 || ''
+    end
     return {
       :title    => title,
       :os       => os,
       :type     => 'script',
       :path     => file, 
       :priority => priority || 0,
-      :rootdir  => rootdir
+      :rootdir  => rootdir,
+      :desc     => desc
     }
   end
 
