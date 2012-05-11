@@ -146,6 +146,13 @@ describe Polvo::Menu do
       items = menu.generate_menu_items('dira').collect {|i| i[:path] }.should_not include 'dira/script_hidden'
     end
 
+    it "items should have multi-line description if header has multi-line description" do
+      menu = Polvo::Menu.new ["spec/fixtures/rootdir3"]
+      descriptions = menu.generate_menu_items('dirb/dirb1').collect {|i| i[:desc] }.each do |i|
+        i.should match /\n/
+      end
+    end
+
 # Next tests:
 
     it "should show only Ubuntu/all scripts if OS is Ubuntu" do
