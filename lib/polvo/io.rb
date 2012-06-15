@@ -50,17 +50,31 @@ module Polvo::IO
       STDIN.gets
     end
     
-    def confirm(str="Continue")
-      printf "\n#{str} [y/n] ".yellow
-      input = STDIN.gets.chomp
-      return( %w{y Y yes YES}.any? {|v| v == input} )
+    def confirm(question='Do you wish to proceed?',options={})
+      choices = '[y/N]'
+      choices = '[Y/n]' if options[:defaultY]
+      answer = ask("#{question} #{choices} ",options)
+      return options[:defaultY] ? !!(answer !~ /^n(?:o)?$/i) : !!(answer =~ /^y(?:es)?$/i)
     end
-    
-    def ask(str)
-      printf "\n#{str}"
-      return STDIN.gets.chomp
+
+    def ask(question,options={})
+      unless options[:nocolor]
+        color = options[:color] || :yellow
+      end
+      question ||= 'Do you wish to proceed?';
+      printf question.send(color)
+      puts if options[:noinline]
+      answer = STDIN.gets.to_s.chomp
+
+      if options[:noempty]
+        while answer =~ /^\s*$/
+          printf "Answer can't be empty! Please provide a valid answer: ".red
+          puts
+          answer = STDIN.gets.to_s.chomp
+        end
+      end
+      return answer
     end
-   
    
     # items can be hashes or string. 
     #   Sample: 
