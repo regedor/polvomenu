@@ -1,4 +1,5 @@
 source :rubygems
-gemspec
+
 gem 'rspec'
+gem 'colorize'
 gem 'simplecov', :require => false 

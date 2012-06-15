@@ -1,7 +1,7 @@
 require 'simplecov'
 SimpleCov.start
 require 'rubygems'
-#require 'bundler/setup'
+require 'bundler/setup'
 
 require 'rspec/mocks/standalone'
 require 'polvomenu' 
