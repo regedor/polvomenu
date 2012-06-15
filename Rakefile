@@ -32,7 +32,7 @@ namespace :install do
   
   task :local => :build do
     system "gem uninstall -x polvomenu"   
-    system "sudo gem install polvo-menu-#{Polvo::Menu::VERSION}.gem"
+    system "gem install polvomenu-#{Polvo::Menu::VERSION}.gem"
   end
   
   desc "Cleans all the gem files, creates a new one, installs it "

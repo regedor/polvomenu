@@ -56,11 +56,29 @@ module Polvo::IO
       return( %w{y Y yes YES}.any? {|v| v == input} )
     end
     
-    def ask(str)
-      printf "\n#{str}"
-      return STDIN.gets.chomp
+    #def ask(str)
+    #  printf "\n#{str}"
+    #  return STDIN.gets.chomp
+    #end
+
+    def ask(question,options={})
+      unless options[:nocolor]
+        color = options[:color] || :yellow
+      end
+      question ||= 'Do you wish to proceed?';
+      printf question.send(color)
+      puts if options[:noinline]
+      answer = STDIN.gets.to_s.chomp
+
+      if options[:noempty]
+        while answer =~ /^\s*$/
+          printf "Answer can't be empty! Please provide a valid answer: ".red
+          puts
+          answer = STDIN.gets.to_s.chomp
+        end
+      end
+      return answer
     end
-   
    
     # items can be hashes or string. 
     #   Sample: 

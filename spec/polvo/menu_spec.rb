@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pp'
 
 describe Polvo::Menu do
   subject { Polvo::Menu.new ["spec/fixtures/rootdir1/", "spec/fixtures/rootdir2"] }
