@@ -50,16 +50,12 @@ module Polvo::IO
       STDIN.gets
     end
     
-    def confirm(str="Continue")
-      printf "\n#{str} [y/n] ".yellow
-      input = STDIN.gets.chomp
-      return( %w{y Y yes YES}.any? {|v| v == input} )
+    def confirm(question='Do you wish to proceed?',options={})
+      choices = '[y/N]'
+      choices = '[Y/n]' if options[:defaultY]
+      answer = ask("#{question} #{choices} ",options)
+      return options[:defaultY] ? !!(answer !~ /^n(?:o)?$/i) : !!(answer =~ /^y(?:es)?$/i)
     end
-    
-    #def ask(str)
-    #  printf "\n#{str}"
-    #  return STDIN.gets.chomp
-    #end
 
     def ask(question,options={})
       unless options[:nocolor]
