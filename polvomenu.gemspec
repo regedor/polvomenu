@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     =  Polvo::Menu::VERSION
   s.date        =  '2012-04-17'
   s.authors     =  ["Group Buddies"]
-  s.email       =  'regedor@groupbuddies.com'
+  s.email       =  ['regedor@groupbuddies.com','andrefs@cpan.org']
   s.homepage    =  'http://rubygems.org/gems/polvomenu'
   s.summary     =  "Directory-based command-line menu"
   s.description =  "Directory-based command-line menu "
