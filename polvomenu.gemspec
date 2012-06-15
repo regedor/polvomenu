@@ -1,5 +1,4 @@
 $:.push File.expand_path("../lib", __FILE__)
-require 'polvomenu'
 
 Gem::Specification.new do |s|
   # Metadata
